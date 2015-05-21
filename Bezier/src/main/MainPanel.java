@@ -41,7 +41,7 @@ public class MainPanel extends JFrame implements ActionListener
         cp.setLayout(new BorderLayout());
         cp.add(p, BorderLayout.CENTER);
     }
-    
+
     /**
      * Initiates the MenuBar
      */
@@ -79,11 +79,9 @@ public class MainPanel extends JFrame implements ActionListener
         if (e.getSource() == itemInfo)
         {
             JOptionPane.showMessageDialog(null, "This Program was created by Richard Isensee and Michael Stahr.\n\n"
-                                              + "      Create points (Blue) by clicking into the painting area.\n"
-                                              + "                Moved the points by dragging them around.\n"
-                                              + "               Remove them by right-clicking on the points. \n"
-                                              + "     Control lines (Gray) are generated between two points,\n"
-                                              + "                       as well as the Bézier curve (Red).");
+                    + "      Create points (Blue) by clicking into the painting area.\n"
+                    + "                 Move the points by dragging them around.\n" + "                     Remove them by right-clicking them. \n"
+                    + "     Control lines (Gray) are generated between the points,\n" + "                        as well as the Bézier curve (Red).");
         }
     }
 }
