@@ -1,12 +1,14 @@
 
 package main;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
@@ -38,11 +40,12 @@ public class PaintPanel extends JPanel
                                           public void mouseClicked (MouseEvent arg0)
                                           {
                                               point = new Point(arg0.getX(), arg0.getY());
-                                              if (arg0.getButton() == MouseEvent.BUTTON1)
+                                              if (arg0.getButton() == MouseEvent.BUTTON1 && list.size() < 4)
                                               {
                                                   if (isInPoint(point) == null)
                                                   {
                                                       list.add(point);
+                                                      System.out.println(list.size());
                                                   }
                                               }
                                               if (arg0.getButton() == MouseEvent.BUTTON3)
@@ -94,22 +97,29 @@ public class PaintPanel extends JPanel
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         Point lastPoint = null;
+        GeneralPath path = new GeneralPath();
         for (Point p : list)
         {
             if (lastPoint != null)
             {
                 g.setColor(Color.gray);
                 Line2D line = new Line2D.Double(lastPoint.getX(), lastPoint.getY(), p.getX(), p.getY());
+                g2d.setStroke(new BasicStroke());
                 g2d.draw(line);
             }
+
             lastPoint = p;
             g.setColor(Color.blue);
             p.paint(g2d);
 
-            g.setColor(Color.red);
-
-            // TODO Bézier-Kurve
-
+            if (list.size() == 4)
+            {
+                path.moveTo(list.get(0).getX(), list.get(0).getY());
+                path.curveTo(list.get(1).getX(), list.get(1).getY(), list.get(2).getX(), list.get(2).getY(), list.get(3).getX(), list.get(3).getY());
+                g.setColor(Color.red);
+                g2d.setStroke(new BasicStroke(2));
+                g2d.draw(path);
+            }
         }
     }
 
