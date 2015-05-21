@@ -37,9 +37,19 @@ public class PaintPanel extends JPanel
                                           public void mouseClicked (MouseEvent arg0)
                                           {
                                               point = new Point(arg0.getX(), arg0.getY());
-                                              if (isInPoint(point) == null)
+                                              if (arg0.getButton() == MouseEvent.BUTTON1)
                                               {
-                                                  list.add(point);
+                                                  if (isInPoint(point) == null)
+                                                  {
+                                                      list.add(point);
+                                                  }
+                                              }
+                                              if (arg0.getButton() == MouseEvent.BUTTON3)
+                                              {
+                                                  if (isInPoint(point) != null)
+                                                  {
+                                                      list.remove(isInPoint(point));
+                                                  }
                                               }
                                           }
 
@@ -109,7 +119,7 @@ public class PaintPanel extends JPanel
     }
 
     /**
-     * Checks if the parameter is within one of the Points in the ArrayList 
+     * Checks if the parameter is within one of the Points in the ArrayList
      */
     public Point isInPoint (Point point)
     {
