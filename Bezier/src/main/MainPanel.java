@@ -29,7 +29,6 @@ public class MainPanel extends JFrame implements ActionListener
     JMenu                     menuHelp         = new JMenu("Help");
 
     JMenuItem                 itemClose        = new JMenuItem("Close");
-    JMenuItem                 itemUndo         = new JMenuItem("Undo");
     JMenuItem                 itemClear        = new JMenuItem("Clear");
     JMenuItem                 itemInfo         = new JMenuItem("Info");
 
@@ -49,17 +48,14 @@ public class MainPanel extends JFrame implements ActionListener
     private void initMenu ()
     {
         itemClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK));
-        itemUndo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK));
         itemClear.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, Event.CTRL_MASK));
         itemInfo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Event.CTRL_MASK));
 
         itemClose.addActionListener(this);
-        itemUndo.addActionListener(this);
         itemClear.addActionListener(this);
         itemInfo.addActionListener(this);
 
         menuFile.add(itemClose);
-        menuEdit.add(itemUndo);
         menuEdit.add(itemClear);
         menuHelp.add(itemInfo);
 
@@ -75,10 +71,6 @@ public class MainPanel extends JFrame implements ActionListener
         {
             System.exit(0);
         }
-        if (e.getSource() == itemUndo)
-        {
-            p.undoList();
-        }
         if (e.getSource() == itemClear)
         {
             p.clearList();
@@ -86,7 +78,12 @@ public class MainPanel extends JFrame implements ActionListener
         }
         if (e.getSource() == itemInfo)
         {
-            JOptionPane.showMessageDialog(null, "This Program was created by Richard Isensee and Michael Stahr.");
+            JOptionPane.showMessageDialog(null, "This Program was created by Richard Isensee and Michael Stahr.\n\n"
+                                              + "      Create points (Blue) by clicking into the painting area.\n"
+                                              + "                Moved the points by dragging them around.\n"
+                                              + "               Remove them by right-clicking on the points. \n"
+                                              + "     Control lines (Gray) are generated between two points,\n"
+                                              + "                       as well as the Bézier curve (Red).");
         }
     }
 }

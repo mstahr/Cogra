@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -92,9 +93,23 @@ public class PaintPanel extends JPanel
     {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
+        Point lastPoint = null;
         for (Point p : list)
         {
+            if (lastPoint != null)
+            {
+                g.setColor(Color.gray);
+                Line2D line = new Line2D.Double(lastPoint.getX(), lastPoint.getY(), p.getX(), p.getY());
+                g2d.draw(line);
+            }
+            lastPoint = p;
+            g.setColor(Color.blue);
             p.paint(g2d);
+
+            g.setColor(Color.red);
+
+            // TODO Bézier-Kurve
+
         }
     }
 
