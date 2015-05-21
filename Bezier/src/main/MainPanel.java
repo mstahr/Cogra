@@ -42,7 +42,10 @@ public class MainPanel extends JFrame implements ActionListener
         cp.setLayout(new BorderLayout());
         cp.add(p, BorderLayout.CENTER);
     }
-
+    
+    /**
+     * Initiates the MenuBar
+     */
     private void initMenu ()
     {
         itemClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK));

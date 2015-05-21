@@ -21,6 +21,8 @@ public class PaintPanel extends JPanel
 
     ArrayList<Point>          list             = new ArrayList<Point>();
     Point                     point;
+    Point                     draggedPoint;
+    boolean                   dragging;
 
     public PaintPanel ()
     {
@@ -32,20 +34,34 @@ public class PaintPanel extends JPanel
     MouseAdapter       mlistener      = new MouseAdapter()
                                       {
                                           @Override
+                                          public void mouseClicked (MouseEvent arg0)
+                                          {
+                                              point = new Point(arg0.getX(), arg0.getY());
+                                              if (isInPoint(point) == null)
+                                              {
+                                                  list.add(point);
+                                              }
+                                          }
+
+                                          @Override
                                           public void mouseReleased (MouseEvent arg0)
                                           {
                                               repaint();
-                                              list.add(point);
-                                              point = null;
+                                              dragging = false;
                                           }
 
                                           @Override
                                           public void mousePressed (MouseEvent arg0)
                                           {
-                                              int x = arg0.getX();
-                                              int y = arg0.getY();
-                                              point = new Point(x, y);
-                                              repaint();
+                                              point = new Point(arg0.getX(), arg0.getY());
+                                              if (isInPoint(point) == null)
+                                              {
+                                                  dragging = false;
+                                              } else
+                                              {
+                                                  dragging = true;
+                                                  draggedPoint = isInPoint(point);
+                                              }
                                           }
                                       };
 
@@ -54,10 +70,11 @@ public class PaintPanel extends JPanel
                                           @Override
                                           public void mouseDragged (MouseEvent arg0)
                                           {
-                                              int x = arg0.getX();
-                                              int y = arg0.getY();
-                                              point = new Point(x, y);
-                                              repaint();
+                                              if (dragging)
+                                              {
+                                                  draggedPoint.setPosition(arg0.getX(), arg0.getY());
+                                                  repaint();
+                                              }
                                           }
                                       };
 
@@ -69,17 +86,19 @@ public class PaintPanel extends JPanel
         {
             p.paint(g2d);
         }
-        if (point != null)
-        {
-            point.paint(g2d);
-        }
     }
 
+    /**
+     * Clears the ArrayList of Points in the PaintPanel
+     */
     public void clearList ()
     {
         list.clear();
     }
 
+    /**
+     * Deletes the last Point in the ArrayList of Points in the PaintPanel
+     */
     public void undoList ()
     {
         if (list.size() > 0)
@@ -87,6 +106,21 @@ public class PaintPanel extends JPanel
             list.remove(list.size() - 1);
             repaint();
         }
+    }
+
+    /**
+     * Checks if the parameter is within one of the Points in the ArrayList 
+     */
+    public Point isInPoint (Point point)
+    {
+        for (Point p : list)
+        {
+            if (point.getX() >= p.getX() - 2 && point.getX() <= p.getX() + 2 && point.getY() >= p.getY() - 2 && point.getY() <= p.getY() + 2)
+            {
+                return p;
+            }
+        }
+        return null;
     }
 
 }
