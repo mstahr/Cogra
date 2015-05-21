@@ -34,11 +34,9 @@ public class PaintPanel extends JPanel
                                           @Override
                                           public void mouseReleased (MouseEvent arg0)
                                           {
-                                              int x = arg0.getX();
-                                              int y = arg0.getY();
-                                              point = new Point(x, y);
-                                              list.add(point);
                                               repaint();
+                                              list.add(point);
+                                              point = null;
                                           }
 
                                           @Override
@@ -74,6 +72,20 @@ public class PaintPanel extends JPanel
         if (point != null)
         {
             point.paint(g2d);
+        }
+    }
+
+    public void clearList ()
+    {
+        list.clear();
+    }
+
+    public void undoList ()
+    {
+        if (list.size() > 0)
+        {
+            list.remove(list.size() - 1);
+            repaint();
         }
     }
 
