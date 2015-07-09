@@ -48,7 +48,7 @@ public class MainPanel extends JFrame implements ActionListener
     private void initMenu ()
     {
         itemClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK));
-        itemClear.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, Event.CTRL_MASK));
+        itemClear.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
         itemInfo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Event.CTRL_MASK));
 
         itemClose.addActionListener(this);

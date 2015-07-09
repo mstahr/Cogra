@@ -16,13 +16,12 @@ import javax.swing.JPanel;
 
 public class PaintPanel extends JPanel
 {
+    private static final long serialVersionUID      = 1L;
 
-    /**
-	 * 
-	 */
-    private static final long serialVersionUID = 1L;
+    ArrayList<Point>          listOfFirstFourPoints = new ArrayList<Point>();
+    ArrayList<Point>          listOfOtherPoints     = new ArrayList<Point>();
+    ArrayList<Quad>          listOfCurves          = new ArrayList<Quad>();
 
-    ArrayList<Point>          list             = new ArrayList<Point>();
     Point                     point;
     Point                     draggedPoint;
     boolean                   dragging;
@@ -39,20 +38,36 @@ public class PaintPanel extends JPanel
                                           @Override
                                           public void mouseClicked (MouseEvent arg0)
                                           {
-                                              point = new Point(arg0.getX(), arg0.getY());
-                                              if (arg0.getButton() == MouseEvent.BUTTON1 && list.size() < 4)
+                                              if (arg0.getClickCount() == 1)
                                               {
-                                                  if (isInPoint(point) == null)
+
+                                                  point = new Point(arg0.getX(), arg0.getY());
+                                                  if (arg0.getButton() == MouseEvent.BUTTON1 && listOfFirstFourPoints.size() < 4)
                                                   {
-                                                      list.add(point);
-                                                      System.out.println(list.size());
+                                                      if (isInPoint(point) == null)
+                                                      {
+                                                          listOfFirstFourPoints.add(point);
+                                                          System.out.println(listOfFirstFourPoints.size());
+                                                      }
                                                   }
-                                              }
-                                              if (arg0.getButton() == MouseEvent.BUTTON3)
-                                              {
-                                                  if (isInPoint(point) != null)
+                                                  if (arg0.getButton() == MouseEvent.BUTTON3)
                                                   {
-                                                      list.remove(isInPoint(point));
+                                                      if (isInPoint(point) != null)
+                                                      {
+                                                          listOfFirstFourPoints.remove(isInPoint(point));
+                                                      }
+                                                  }
+                                              } else if (arg0.getClickCount() == 2 && listOfFirstFourPoints.size() >= 4)
+                                              {
+                                                  System.out.println("double");
+                                                  point = new Point(arg0.getX(), arg0.getY());
+                                                  if (arg0.getButton() == MouseEvent.BUTTON1)
+                                                  {
+                                                      if (isInPoint(point) == null)
+                                                      {
+                                                          listOfFirstFourPoints.add(point);
+                                                          System.out.println(listOfFirstFourPoints.size());
+                                                      }
                                                   }
                                               }
                                           }
@@ -98,7 +113,7 @@ public class PaintPanel extends JPanel
         Graphics2D g2d = (Graphics2D) g;
         Point lastPoint = null;
         GeneralPath path = new GeneralPath();
-        for (Point p : list)
+        for (Point p : listOfFirstFourPoints)
         {
             if (lastPoint != null)
             {
@@ -112,10 +127,11 @@ public class PaintPanel extends JPanel
             g.setColor(Color.blue);
             p.paint(g2d);
 
-            if (list.size() == 4)
+            if (listOfFirstFourPoints.size() >= 4)
             {
-                path.moveTo(list.get(0).getX(), list.get(0).getY());
-                path.curveTo(list.get(1).getX(), list.get(1).getY(), list.get(2).getX(), list.get(2).getY(), list.get(3).getX(), list.get(3).getY());
+                path.moveTo(listOfFirstFourPoints.get(0).getX(), listOfFirstFourPoints.get(0).getY());
+                path.curveTo(listOfFirstFourPoints.get(1).getX(), listOfFirstFourPoints.get(1).getY(), listOfFirstFourPoints.get(2).getX(),
+                        listOfFirstFourPoints.get(2).getY(), listOfFirstFourPoints.get(3).getX(), listOfFirstFourPoints.get(3).getY());
                 g.setColor(Color.red);
                 g2d.setStroke(new BasicStroke(2));
                 g2d.draw(path);
@@ -128,7 +144,7 @@ public class PaintPanel extends JPanel
      */
     public void clearList ()
     {
-        list.clear();
+        listOfFirstFourPoints.clear();
     }
 
     /**
@@ -136,9 +152,9 @@ public class PaintPanel extends JPanel
      */
     public void undoList ()
     {
-        if (list.size() > 0)
+        if (listOfFirstFourPoints.size() > 0)
         {
-            list.remove(list.size() - 1);
+            listOfFirstFourPoints.remove(listOfFirstFourPoints.size() - 1);
             repaint();
         }
     }
@@ -148,7 +164,14 @@ public class PaintPanel extends JPanel
      */
     public Point isInPoint (Point point)
     {
-        for (Point p : list)
+        for (Point p : listOfFirstFourPoints)
+        {
+            if (point.getX() >= p.getX() - 2 && point.getX() <= p.getX() + 2 && point.getY() >= p.getY() - 2 && point.getY() <= p.getY() + 2)
+            {
+                return p;
+            }
+        }
+        for (Point p : listOfOtherPoints)
         {
             if (point.getX() >= p.getX() - 2 && point.getX() <= p.getX() + 2 && point.getY() >= p.getY() - 2 && point.getY() <= p.getY() + 2)
             {
